@@ -2,7 +2,7 @@
 
 const container = document.getElementById('c-container');
 const calendar = document.getElementById('calendar');
-const candidate = document.getElementById('candidate');
+const candidates = document.getElementById('candidates');
 
 const weeks = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -48,7 +48,6 @@ show_calendar(year, month);
 function add_data_attribute(e) {
   if (e.target.classList.contains('able-day')) {
     const data_date = e.target.dataset.date;
-    let candidate_date = new Date(data_date);
 
     //すでに候補日に追加されてる場合は追加しない。
     if (candidateArray.includes(data_date)) {
@@ -56,8 +55,16 @@ function add_data_attribute(e) {
     }
     //候補日の配列に追加
     candidateArray.push(data_date);
+
+    //ソートする
+    candidateArray.sort();
+
     //日付を候補日に追加
-    candidate.innerHTML += `${candidate_date.getMonth() + 1}/${candidate_date.getDate()}(${weeks[candidate_date.getDay()]})\n`;
+    candidates.innerHTML = '';
+    for (let i = 0; i < candidateArray.length; i++) {
+      const candidate_date = new Date(candidateArray[i]);
+      candidates.innerHTML += `${candidate_date.getMonth() + 1}/${candidate_date.getDate()}(${weeks[candidate_date.getDay()]})\n`;
+    }
   }
 }
 
@@ -92,7 +99,11 @@ function show_calendar(year, month) {
       if (w === 0 && d < dayBegin) {
         html += `<td class="disable">${lastMonthDayEnd - dayBegin + d + 1}</td>`;
       } else if (day <= dayEnd) {
-        html += `<td class="able-day" data-date=${year}-${month + 1}-${day}>${day}</td>`;
+        //0埋め
+        const y0 = ('000' + year).slice(-4);
+        const m0 = ('0' + (month + 1)).slice(-2);
+        const d0 = ('0' + day).slice(-2);
+        html += `<td class="able-day" data-date=${y0}-${m0}-${d0}>${day}</td>`;
         day++;
       } else {
         html += `<td class="disable">${day - dayEnd}</td>`;

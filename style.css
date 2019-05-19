@@ -14,3 +14,7 @@ i {
 .disable {
   color: #ccc;
 }
+
+.able-day:hover {
+  cursor: pointer;
+}
