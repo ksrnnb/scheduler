@@ -18,3 +18,7 @@ i {
 .able-day:hover {
   cursor: pointer;
 }
+
+.selected {
+  background-color: lightblue;
+}

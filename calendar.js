@@ -22,7 +22,7 @@ const prev = document.getElementById('prev');
 const next = document.getElementById('next');
 
 prev.addEventListener('click', () => {
-  document.removeEventListener('click', add_data_attribute);
+  document.removeEventListener('click', add_candidates);
   if (month > 0) {
     month--;
   } else {
@@ -33,7 +33,7 @@ prev.addEventListener('click', () => {
 });
 
 next.addEventListener('click', () => {
-  document.removeEventListener('click', add_data_attribute);
+  document.removeEventListener('click', add_candidates);
   if (month < 11) {
     month++;
   } else {
@@ -45,21 +45,24 @@ next.addEventListener('click', () => {
 
 show_calendar(year, month);
 
-function add_data_attribute(e) {
+function add_candidates(e) {
   if (e.target.classList.contains('able-day')) {
     const data_date = e.target.dataset.date;
 
     //すでに候補日に追加されてる場合は追加しない。
     if (candidateArray.includes(data_date)) {
-      return;
+      e.target.classList.remove('selected');
+      candidateArray = candidateArray.filter(d => d !== data_date);
+    } else {
+      //洗濯済みの日付の背景色かえる。
+      e.target.classList.add('selected');
+      //候補日の配列に追加
+      candidateArray.push(data_date);
     }
-    //候補日の配列に追加
-    candidateArray.push(data_date);
-
+    
     //ソートする
     candidateArray.sort();
-
-    //日付を候補日に追加
+    //候補日程の更新
     candidates.innerHTML = '';
     for (let i = 0; i < candidateArray.length; i++) {
       const candidate_date = new Date(candidateArray[i]);
@@ -103,7 +106,13 @@ function show_calendar(year, month) {
         const y0 = ('000' + year).slice(-4);
         const m0 = ('0' + (month + 1)).slice(-2);
         const d0 = ('0' + day).slice(-2);
-        html += `<td class="able-day" data-date=${y0}-${m0}-${d0}>${day}</td>`;
+        
+        //すでに選択済みの場合はselectedクラスを追加。
+        if (candidateArray.includes(y0 + '-' + m0 + '-' + d0)) {
+          html += `<td class="able-day selected" data-date=${y0}-${m0}-${d0}>${day}</td>`;
+        } else {
+          html += `<td class="able-day" data-date=${y0}-${m0}-${d0}>${day}</td>`;
+        }
         day++;
       } else {
         html += `<td class="disable">${day - dayEnd}</td>`;
@@ -118,6 +127,6 @@ function show_calendar(year, month) {
 
   calendar.innerHTML = html;
 
-  document.addEventListener("click", add_data_attribute);
+  document.addEventListener("click", add_candidates);
 
 }

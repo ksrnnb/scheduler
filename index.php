@@ -36,5 +36,14 @@
     print '予定名: ' . $input['schedule-name'] . '<br>';
     $candArray = explode("\n", $input['candidates']);
     print implode('<br>', $candArray);
+    
+
+    //あとで修正。　とりあえずこんなかんじでURLをつくる。
+    $schedule_url = $_SERVER['PHP_SELF'] . '/' . md5(uniqid(mt_rand(), true));
+
+    print $schedule_url;
+
+    //データベースの処理追加する。
+    
   }
 ?>
