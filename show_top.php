@@ -1,3 +1,6 @@
+<?php
+  function show_top_page() {
+    ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -33,3 +36,4 @@
   <script src="calendar.js"></script>
 </body>
 </html>
+<?php } ?>
