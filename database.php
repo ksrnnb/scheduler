@@ -11,7 +11,7 @@
 
   function createDatabase($db) {
     $db->exec("CREATE TABLE IF NOT EXISTS User (
-      userId INT AUTO_INCREMENT,
+      userId INT NOT NULL AUTO_INCREMENT,
       userName VARCHAR(16),
       scheduleId CHAR(32),
       PRIMARY KEY(userId, scheduleId)
@@ -21,8 +21,8 @@
       scheduleName VARCHAR(64)
     )");
     $db->exec("CREATE TABLE IF NOT EXISTS Candidate (
-      candidateId INT AUTO_INCREMENT,
-      candidate VARCHAR(8),
+      candidateId INT NOT NULL AUTO_INCREMENT,
+      candidate VARCHAR(16),
       scheduleId CHAR(32),
       PRIMARY KEY(candidateId, scheduleId)
     )");
@@ -40,8 +40,11 @@
     $q->execute(array($scheduleId, $schedule_name));
     
     foreach ($candidates as $candidate) {
+      
       $q = $db->prepare("INSERT INTO Candidate (candidate, scheduleId) VALUES (?, ?)");
-      $q->execute(array($candidate, $scheduleId));
+      $q->execute(array($tmp, $scheduleId));
     }
+    
   }
+
 ?>

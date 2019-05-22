@@ -30,7 +30,10 @@
 
     //htmlentities: XSS対策
     $input['schedule-name'] = htmlentities($_POST['schedule-name']);
-    $input['candidates'] = explode("\n", htmlentities($_POST['candidates']));
+    //ここ、CR＋LF改行であることに注意。\nでArrayにするとデータベースに挿入できなくなる。
+    $input['candidates'] = explode("\r\n", htmlentities($_POST['candidates']));
+    // 最後の1個は空の要素が入ってる（最後の候補日にも改行がついている）ので省く。
+    array_splice($input['candidates'], count($input['candidates']) - 1);
     return array($errors, $input);
   }
 
