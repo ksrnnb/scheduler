@@ -42,7 +42,7 @@
     foreach ($candidates as $candidate) {
       
       $q = $db->prepare("INSERT INTO Candidate (candidate, scheduleId) VALUES (?, ?)");
-      $q->execute(array($tmp, $scheduleId));
+      $q->execute(array($candidate, $scheduleId));
     }
     
   }
