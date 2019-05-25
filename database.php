@@ -29,6 +29,7 @@
     $db->exec("CREATE TABLE IF NOT EXISTS Availability (
       availability VARCHAR(32),
       scheduleId CHAR(32),
+      userId INT NOT NULL,
       candidateId INT PRIMARY KEY
     )");
   }
@@ -45,6 +46,23 @@
       $q->execute(array($candidate, $scheduleId));
     }
     
+  }
+
+  function get_schedule($id) {
+    global $db;
+    //スケジュール名、候補日、すでに登録したユーザーをとってきて返す。
+    //schedule_name: string, candidates: array, users: array
+
+    //とりあえず仮で適当なものをreturnする。
+    $schedule_name = 'よてい';
+    $candidates = ['4/29', '5/21', '5/24'];
+    $users = ['user1', 'user2'];
+    $availabilities = array('user1' => array('4/29' => 0, '5/21' => 0, '5/24' => 1), 'user2' => array('4/29' => 1, '5/21' => 1, '5/24' => 0));
+
+    
+    // availabilityはどうする？
+    return array($schedule_name, $candidates, $users, $availabilities);
+
   }
 
 ?>

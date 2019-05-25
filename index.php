@@ -1,6 +1,7 @@
 <?php
 
   require 'show_top.php';
+  require 'show_table.php';
   require 'database.php';
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -11,7 +12,12 @@
       process_form($input);
     }
   } else {
-    show_form();
+    if (isset($_GET['id'])) {
+      //ここ脆弱性確認する！！　OSコマンドインジェクション？？
+      show_table($_GET['id']);
+    } else {
+      show_form();
+    }
   }
 
   function show_form($errors = array()) {
