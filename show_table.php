@@ -13,7 +13,7 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="./css//style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <title>Scheduler</title>
   </head>
@@ -62,7 +62,7 @@
       <button id="input">入力ボタン</button>
     </div>
     <div id="form" class="hidden">
-      <?php print "<form method=\"POST\" action=\"/hogehoge.php\">"?>
+      <?php print "<form method=\"POST\" action=\"/registration.php\">"?>
         <div>
           <p>ユーザ名</p>
           <input name="user" required>
@@ -71,15 +71,17 @@
           <p>候補</p>
           <?php
             if (isset($candidates)) {
+              $input_array = [];
               $html = '<table>';
               foreach ($candidates as $ci => $candidate) {
+                array_push($input_array, $circle);
                 $html .= '<tr><td>' . $candidate . '</td>';
                 foreach ($symbols as $sj => $symbol) {
                   if ($sj == 0) {
                     //初期では丸にする。
-                    $html .= "<td class=\"btn selected\"  data-index=\"{$ci}-{$sj}\">" . $symbol . '</td>';
+                    $html .= "<td class=\"btn selected\" data-index=\"{$ci}-{$sj}\">" . $symbol . '</td>';
                   } else {
-                    $html .= "<td class=\"btn\"  data-index=\"{$ci}-{$sj}\">" . $symbol . '</td>';
+                    $html .= "<td class=\"btn\" data-index=\"{$ci}-{$sj}\">" . $symbol . '</td>';
                   }
                 }
                 $html .= '</tr>';
@@ -87,14 +89,16 @@
               $html .= '</table>';
               print $html;
             }
+            $value_attr = implode('-', $input_array);
+            print "<input id=\"availabilities\" class=\"hidden\" type=\"text\" name=\"availability\" value=\"{$value_attr}\">";
           ?>
         </div>
         <div>
-          <input type="submit" value="予定をつくる">
+          <input type="submit" value="とうろく">
         </div>
       </form>
     </div>
-    <script src="show_table.js"></script>
+    <script src="./javascript/show_table.js"></script>
   </body>
 </html>
 <?php } ?>
