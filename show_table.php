@@ -27,17 +27,15 @@
 
       $html = "<table><tr><td>日程</td><td>";
       $html .= implode('</td><td>', $symbols);
-      $html .= '</td></tr>';
+      $html .= '</td>';
       if (isset($users)) {
-        // </tr>を除く
-        $html = substr($html, 0, strlen($html) - 5);
         $html .= '<td>';
         $html .= implode('</td><td>', $users);
-        $html .= '</td></tr>';
+        $html .= '</td>';
       }
 
       if (isset($candidates)) {
-        $html .= '<tr>';
+        $html .= '</tr><tr>';
         foreach ($candidates as $candidate) {
           $html = $html . '<td>' . $candidate . '</td><td>';
           // いい感じの名前に。。。
@@ -64,7 +62,37 @@
       <button id="input">入力ボタン</button>
     </div>
     <div id="form" class="hidden">
-      入力フォームをここに。
+      <?php print "<form method=\"POST\" action=\"/hogehoge.php\">"?>
+        <div>
+          <p>ユーザ名</p>
+          <input name="user" required>
+        </div>
+        <div>
+          <p>候補</p>
+          <?php
+            if (isset($candidates)) {
+              $html = '<table>';
+              foreach ($candidates as $ci => $candidate) {
+                $html .= '<tr><td>' . $candidate . '</td>';
+                foreach ($symbols as $sj => $symbol) {
+                  if ($sj == 0) {
+                    //初期では丸にする。
+                    $html .= "<td class=\"btn selected\"  data-index=\"{$ci}-{$sj}\">" . $symbol . '</td>';
+                  } else {
+                    $html .= "<td class=\"btn\"  data-index=\"{$ci}-{$sj}\">" . $symbol . '</td>';
+                  }
+                }
+                $html .= '</tr>';
+              }
+              $html .= '</table>';
+              print $html;
+            }
+          ?>
+        </div>
+        <div>
+          <input type="submit" value="予定をつくる">
+        </div>
+      </form>
     </div>
     <script src="show_table.js"></script>
   </body>

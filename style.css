@@ -11,6 +11,10 @@ i {
   font-size: 24px;
 }
 
+.btn:hover {
+  cursor: pointer;
+}
+
 .disable {
   color: #ccc;
 }
