@@ -3,6 +3,7 @@
 const container = document.getElementById('c-container');
 const calendar = document.getElementById('calendar');
 const candidates = document.getElementById('candidates');
+const candidates_input = document.getElementById('candidates_input');
 
 const weeks = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -62,6 +63,7 @@ function add_candidates(e) {
     
     //ソートする
     candidateArray.sort();
+    candidates_input.setAttribute('value', candidateArray.join('-'));
     //候補日程の更新
     candidates.innerHTML = '';
     for (let i = 0; i < candidateArray.length; i++) {
@@ -109,9 +111,9 @@ function show_calendar(year, month) {
         
         //すでに選択済みの場合はselectedクラスを追加。
         if (candidateArray.includes(y0 + '-' + m0 + '-' + d0)) {
-          html += `<td class="able-day selected" data-date=${y0}-${m0}-${d0}>${day}</td>`;
+          html += `<td class="able-day selected" data-date=${y0}/${m0}/${d0}>${day}</td>`;
         } else {
-          html += `<td class="able-day" data-date=${y0}-${m0}-${d0}>${day}</td>`;
+          html += `<td class="able-day" data-date=${y0}/${m0}/${d0}>${day}</td>`;
         }
         day++;
       } else {

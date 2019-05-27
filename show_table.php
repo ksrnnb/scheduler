@@ -2,8 +2,9 @@
 // index.phpですでにrequireしているから、もうrequireする必要ない？
   // require 'database.php';
   function show_table($id) {  
-    list($circle, $triangle, $cross) = array(0, 1, 2);
+    $weeks = ['日', '月', '火', '水', '木', '金', '土'];
     $symbols = array('○', '△', '×');
+    list($circle, $triangle, $cross) = array(0, 1, 2);
     //スケジュール名、候補日、ユーザー、候補日（二重の連想配列）をとってきて返す。
     //schedule_name: string, candidates: array, users: array, availabilities: associative array(associative array)
     list($schedule_name, $candidates, $users, $availabilities) = get_schedule($id);
@@ -13,7 +14,7 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="./css//style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <title>Scheduler</title>
   </head>
@@ -37,7 +38,9 @@
       if (isset($candidates)) {
         $html .= '</tr><tr>';
         foreach ($candidates as $candidate) {
-          $html = $html . '<td>' . $candidate . '</td><td>';
+          
+          $time = strtotime($candidate);
+          $html = $html . '<td>' . date('n/j', $time) . '(' . $weeks[date('w', $time)] .')</td><td>';
           // いい感じの名前に。。。
           // $avail_sum = get_sum($id, $candidate);
           //データベースから合計とってくる、とりあえず仮で適当な配列
@@ -71,11 +74,15 @@
           <p>候補</p>
           <?php
             if (isset($candidates)) {
-              $input_array = [];
+              $cand_array = [];
+              $avail_array = [];
               $html = '<table>';
               foreach ($candidates as $ci => $candidate) {
-                array_push($input_array, $circle);
-                $html .= '<tr><td>' . $candidate . '</td>';
+                array_push($cand_array, $candidate);
+                //初期では丸にする。
+                array_push($avail_array, $circle);
+                $time = strtotime($candidate);
+                $html .= '<tr><td>' . date('n/j', $time) . '(' . $weeks[date('w', $time)] . ')</td>';
                 foreach ($symbols as $sj => $symbol) {
                   if ($sj == 0) {
                     //初期では丸にする。
@@ -89,8 +96,12 @@
               $html .= '</table>';
               print $html;
             }
-            $value_attr = implode('-', $input_array);
-            print "<input id=\"availabilities\" class=\"hidden\" type=\"text\" name=\"availability\" value=\"{$value_attr}\">";
+            $avail_value = implode('-', $avail_array);
+            $cand_value = implode('-', $cand_array);
+
+            print "<input id=\"availabilities\" type=\"hidden\" name=\"availability\" value=\"{$avail_value}\">";
+            print "<input type=\"hidden\" name=\"scheduleId\" value=\"{$id}\">";
+            print "<input type=\"hidden\" name=\"candidates\" value=\"{$cand_value}\">";
           ?>
         </div>
         <div>
@@ -98,7 +109,7 @@
         </div>
       </form>
     </div>
-    <script src="./javascript/show_table.js"></script>
+    <script src="../javascript/show_table.js"></script>
   </body>
 </html>
 <?php } ?>

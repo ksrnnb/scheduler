@@ -1,4 +1,5 @@
 <?php
+  require 'database.php';
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     list($errors, $input) = validate_form();
     if ($errors) {
@@ -23,6 +24,8 @@
     $input = array();
 
     //htmlentities: XSS対策
+    $input['scheduleId'] = htmlentities($_POST['scheduleId']);
+    $input['candidates'] = htmlentities($_POST['candidates']);
     $input['user'] = htmlentities($_POST['user']);
     $input['availability'] = htmlentities($_POST['availability']);
 
@@ -30,8 +33,7 @@
   }
 
   function process_form($input) {
-    print 'User: ' . $input['user'] . '<br>';
-    print $input['availability'];
+    user_registration($input['scheduleId'], $input['candidates'], $input['user'], $input['availability']);
   }
     
 ?>

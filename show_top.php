@@ -21,7 +21,9 @@
       </div>
       <div>
         <p>候補日程</p>
-        <textarea id="candidates" name="candidates" rows=10 required readonly></textarea>
+        <!-- <textarea id="candidates" name="candidates" rows=10 required readonly></textarea> -->
+        <textarea id="candidates" rows=10 required readonly></textarea>
+        <input id="candidates_input" type="hidden" name="candidates">
       </div>
       <div>
         <input type="submit" value="予定をつくる">
