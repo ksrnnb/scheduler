@@ -49,32 +49,50 @@
     
   }
 
-  function get_schedule($id) {
+  function get_schedule($scheduleId) {
     global $db;
     //スケジュール名、候補日、すでに登録したユーザーをとってきて返す。
     //schedule_name: string, candidates: array, users: array, availabilities: array(array)
 
     //Schedule, Candidate, User, Availabilityを結合する？
     $qs = $db->prepare("SELECT scheduleName from Schedule where scheduleId = ?");
-    $qs->execute(array($id));
+    $qs->execute(array($scheduleId));
     $schedule_name = $qs->fetch()->scheduleName;
 
     $qc = $db->prepare("SELECT candidate from Candidate where scheduleId = ?");
-    $qc->execute(array($id));
+    $qc->execute(array($scheduleId));
     $candidates = [];
-    while ($cand = $qc->fetch()->candidate) {
-      array_push($candidates, $cand);
+    while ($row = $qc->fetch()) {
+      array_push($candidates, $row->candidate);
     }
 
     //ユーザーとAvailabilitiesをとってきて同じ形式で返す。
-    $qu = $db->prepare("SELECT userName from User where scheduleId = ?");
-    $qu->execute(array($id));
+    $qu = $db->prepare("SELECT userName, userId from User where scheduleId = ?");
+    $qu->execute(array($scheduleId));
     $users = [];
+    $userIds = [];
     while ($row = $qu->fetch()) {
       array_push($users, $row->userName);
+      array_push($userIds, $row->userId);
     }
 
-    $availabilities = array('user1' => array('2019/4/1' => 0, '2019/5/21' => 0, '2019/5/24' => 1), 'user2' => array('2019/4/1' => 1, '2019/5/21' => 1, '2019/5/24' => 0));
+    //availabilitiesを同じ形で返すように。。。
+    $availabilities = [];
+    foreach ($userIds as $userId) {
+      $qa = $db->prepare("SELECT availability, candidate from Availability INNER JOIN Candidate 
+                          ON Availability.candidateId = Candidate.candidateId where Candidate.scheduleId = ? and userId = ?");
+      $qa->execute(array($scheduleId, $userId));
+      // ここは毎回初期化しとく
+      $availability_array = [];
+      while ($row = $qa->fetch()) {
+        $availability_array = array_merge($availability_array, array($row->candidate => $row->availability));
+      }
+      //userIdからuserNameとってくる
+      $qu = $db->prepare("SELECT userName from User where userId = ?");
+      $qu->execute(array($userId));
+      $availabilities = array_merge($availabilities, array($qu->fetch()->userName => $availability_array));
+    }
+    // $availabilities = array('user1' => array('2019/4/1' => 0, '2019/5/21' => 0, '2019/5/24' => 1), 'user2' => array('2019/4/1' => 1, '2019/5/21' => 1, '2019/5/24' => 0));
 
     return array($schedule_name, $candidates, $users, $availabilities);
 

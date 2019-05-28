@@ -29,7 +29,8 @@
       $html = "<table><tr><td>日程</td><td>";
       $html .= implode('</td><td>', $symbols);
       $html .= '</td>';
-      if (isset($users)) {
+      //issetだと空の配列もtrueになるっぽい
+      if (! empty($users)) {
         $html .= '<td>';
         $html .= implode('</td><td>', $users);
         $html .= '</td>';
