@@ -34,6 +34,10 @@
 
   function process_form($input) {
     user_registration($input['scheduleId'], $input['candidates'], $input['user'], $input['availability']);
+    
+    $schedule_url =  '/?id=' . $input['scheduleId'];
+    //リダイレクトする。
+    header('Location: ' . $schedule_url);
   }
     
 ?>

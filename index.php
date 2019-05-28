@@ -49,7 +49,7 @@
 
     registration($scheduleId, $input['schedule-name'], $input['candidates']);
     
-    $schedule_url = $_SERVER['PHP_SELF'] . '/?id=' . $scheduleId;
+    $schedule_url = '/?id=' . $scheduleId;
     //リダイレクトする。
     header('Location: ' . $schedule_url);
     exit;
