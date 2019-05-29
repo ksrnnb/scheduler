@@ -98,6 +98,26 @@
 
   }
 
+  function get_symbol_sum($scheduleId, $candidate) {
+    global $db;
+
+    // いっかいMySQLで確認する。各UserのAvailabilityがでてくればいいかんじ。それに対してループ組んでやればいいかと
+    $q = $db->prepare("SELECT availability from Availability
+                      INNER JOIN Candidate ON Availability.candidateId = Candidate.candidateId
+                      where Candidate.scheduleId = ? and Candidate.candidate = ?");
+    $q->execute(array($scheduleId, $candidate));
+
+    // 初期化
+    $symbol_sum = array(0, 0, 0);
+    while ($row = $q->fetch()) {
+      // 各ユーザーに対してループして、合計する感じにしたい。今のループ条件はたぶんだめ。
+      $symbol_sum[$row->availability]++;
+    }
+
+    return $symbol_sum;
+
+  }
+
   function user_registration($scheduleId, $candidates, $user, $availabilities) {
     global $db;
     //availabilitiesを数値の配列に変換

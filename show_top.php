@@ -11,7 +11,7 @@
 </head>
 <body>
   <div>
-    <h2>Scheduler</h2>
+    <h2><a href="/">Scheduler</a></h2>
   </div>
   <div class="container">
     <?php print "<form method=\"POST\" action=\"{$_SERVER['PHP_SELF']}\">"?>

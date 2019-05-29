@@ -1,13 +1,13 @@
 <?php
 // index.phpですでにrequireしているから、もうrequireする必要ない？
   // require 'database.php';
-  function show_table($id) {  
+  function show_table($scheduleId) {  
     $weeks = ['日', '月', '火', '水', '木', '金', '土'];
     $symbols = array('○', '△', '×');
     list($circle, $triangle, $cross) = array(0, 1, 2);
     //スケジュール名、候補日、ユーザー、候補日（二重の連想配列）をとってきて返す。
     //schedule_name: string, candidates: array, users: array, availabilities: associative array(associative array)
-    list($schedule_name, $candidates, $users, $availabilities) = get_schedule($id);
+    list($schedule_name, $candidates, $users, $availabilities) = get_schedule($scheduleId);
     
     ?>
 <!DOCTYPE html>
@@ -20,7 +20,25 @@
   </head>
   <body>
     <div>
+      <h2><a href="/">Scheduler</a></h2>
+    </div>
+    <div>
       <h2><?= $schedule_name ?></h2>
+    </div>
+    <div>
+      <h3>
+      <?php
+        $url = '';
+        if (empty($_SERVER['HTTPS'])) {
+          $url .= 'http://';
+        } else {
+          $url .= 'https://';
+        }
+          $url .= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+          
+          print $url;
+      ?>
+      </h3>
     </div>
     <div>
       <p>候補</p>
@@ -42,11 +60,10 @@
           
           $time = strtotime($candidate);
           $html = $html . '<td>' . date('n/j', $time) . '(' . $weeks[date('w', $time)] .')</td><td>';
-          // いい感じの名前に。。。
-          // $avail_sum = get_sum($id, $candidate);
-          //データベースから合計とってくる、とりあえず仮で適当な配列
-          $avail_sum = array(2, 1, 1);
-          $html .= implode('</td><td>', $avail_sum);
+          // scheduleIdとcandidateからとってくる。
+          $symbol_sum = get_symbol_sum($scheduleId, $candidate);
+  
+          $html .= implode('</td><td>', $symbol_sum);
           $html .= '</td>';
           foreach ($users as $user) {
             $html = $html . '<td>' . $symbols[$availabilities[$user][$candidate]] . '</td>';
@@ -101,7 +118,7 @@
             $cand_value = implode('-', $cand_array);
 
             print "<input id=\"availabilities\" type=\"hidden\" name=\"availability\" value=\"{$avail_value}\">";
-            print "<input type=\"hidden\" name=\"scheduleId\" value=\"{$id}\">";
+            print "<input type=\"hidden\" name=\"scheduleId\" value=\"{$scheduleId}\">";
             print "<input type=\"hidden\" name=\"candidates\" value=\"{$cand_value}\">";
           ?>
         </div>
