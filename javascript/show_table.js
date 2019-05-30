@@ -3,6 +3,9 @@
 const input = document.getElementById('input');
 const form = document.getElementById('form');
 const availabilities = document.getElementById('availabilities');
+let candidates = document.getElementsByClassName('candidate');
+let users = document.getElementsByClassName('user');
+const symbols = ['○', '△', '×'];
 
 input.addEventListener('click', () => {
   if (form.classList.contains('hidden')) {
@@ -18,7 +21,7 @@ input.addEventListener('click', () => {
 
 
 document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('btn')) {
+  if (e.target.classList.contains('symbol')) {
     if (! e.target.classList.contains('selected')) {
       //index[0]: candidates何行目,　index[1]:まる、さんかく、ばつ(numeric)
       let index_tmp = e.target.dataset.index;
@@ -44,5 +47,20 @@ document.addEventListener('click', (e) => {
       }
       e.target.classList.add('selected');
     }
+  } else if (e.target.classList.contains('user')) {
+    const user = e.target;
+    //HTML collectionをarrayに変換、この1行ちょっと難しい。
+    users = [].slice.call(users);
+    //userクラスの中で何番目か。
+    let index = users.indexOf(user);
+
+    candidates = [].slice.call(candidates);
+
+    //配列つくってからフォームに反映させる？　どうするか考える。
+    candidates.forEach( (candidate) => {
+      let symbol = candidate.children[index + 4].innerHTML;
+      console.log(symbols.indexOf(symbol));
+    })
+    
   }
 });

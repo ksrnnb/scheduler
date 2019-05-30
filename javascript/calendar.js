@@ -87,7 +87,7 @@ function show_calendar(year, month) {
 
   let html = '<h2>' + year + '/' + (month + 1) + '</h2>';
 
-  html += '<table><tr>';
+  html += '<table class="table"><tr>';
 
   for (let i = 0; i < weeks.length; i++) {
     html += '<td>' + weeks[i] + '</td>';

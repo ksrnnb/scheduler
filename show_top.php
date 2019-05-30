@@ -8,12 +8,14 @@
   <link rel="stylesheet" href="./css/style.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
   <title>Scheduler</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-  <div>
-    <h2><a href="/">Scheduler</a></h2>
-  </div>
   <div class="container">
+    <div>
+      <h2><a href="/">Scheduler</a></h2>
+    </div>
     <?php print "<form method=\"POST\" action=\"{$_SERVER['PHP_SELF']}\">"?>
       <div>
         <p>予定名</p>

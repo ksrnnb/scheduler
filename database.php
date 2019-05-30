@@ -110,7 +110,6 @@
     // 初期化
     $symbol_sum = array(0, 0, 0);
     while ($row = $q->fetch()) {
-      // 各ユーザーに対してループして、合計する感じにしたい。今のループ条件はたぶんだめ。
       $symbol_sum[$row->availability]++;
     }
 
