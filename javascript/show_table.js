@@ -3,9 +3,12 @@
 const input = document.getElementById('input');
 const form = document.getElementById('form');
 const availabilities = document.getElementById('availabilities');
+const user_form = document.getElementById('user-form');
 let candidates = document.getElementsByClassName('candidate');
+let symbols = document.getElementsByClassName('symbol');
 let users = document.getElementsByClassName('user');
-const symbols = ['○', '△', '×'];
+
+const symbol_array = ['○', '△', '×'];
 
 input.addEventListener('click', () => {
   if (form.classList.contains('hidden')) {
@@ -48,7 +51,8 @@ document.addEventListener('click', (e) => {
       e.target.classList.add('selected');
     }
   } else if (e.target.classList.contains('user')) {
-    const user = e.target;
+    let user = e.target;
+    let userName = e.target.innerHTML;
     //HTML collectionをarrayに変換、この1行ちょっと難しい。
     users = [].slice.call(users);
     //userクラスの中で何番目か。
@@ -57,10 +61,35 @@ document.addEventListener('click', (e) => {
     candidates = [].slice.call(candidates);
 
     //配列つくってからフォームに反映させる？　どうするか考える。
+    let availability_array = [];
     candidates.forEach( (candidate) => {
+      //候補日、symbol分ずらすので4たす。
       let symbol = candidate.children[index + 4].innerHTML;
-      console.log(symbols.indexOf(symbol));
-    })
+      availability_array.push(symbol_array.indexOf(symbol));
+    });
+
+    user_form.setAttribute('value', userName);
+    form.classList.remove('hidden');
+
+    let trows = document.querySelectorAll('#availability-form tr');
+    
+    trows.forEach ( (trow, index) => {
+      //selectedクラスを外す
+      for (let i = 1; i < 4; i++) {
+        if (trow.children[i].classList.contains('selected')) {
+          trow.children[i].classList.remove('selected');
+        }
+      }
+      //候補日があるから1足すとsymbolのindexになる。
+      let sindex = availability_array[index] + 1;
+      trow.children[sindex].classList.add('selected');
+
+      // availabilityのinputも更新
+      let value_attr = availability_array.join('-');
+      availabilities.setAttribute('value', value_attr);
+
+      
+    });
     
   }
 });

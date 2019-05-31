@@ -52,9 +52,9 @@
         $html .= '</th>';
         //issetだと空の配列もtrueになるっぽい
         if (! empty($users)) {
-          $html .= '<th scope="col"><p class="user">';
-          $html .= implode('</p></th><th scope="col"><p class="user">', $users);
-          $html .= '</p></th></tr></thead>';
+          $html .= '<th scope="col"><a href="#form" class="user">';
+          $html .= implode('</a></th><th scope="col"><a href="#form" class="user">', $users);
+          $html .= '</a></th></tr></thead>';
         }
         
 
@@ -90,7 +90,7 @@
         <?php print "<form method=\"POST\" action=\"/registration.php\">"?>
           <div>
             <p>ユーザ名</p>
-            <input name="user" required>
+            <input name="user" id="user-form" required>
           </div>
           <div>
             <p>候補</p>
@@ -98,7 +98,7 @@
               if (isset($candidates)) {
                 $cand_array = [];
                 $avail_array = [];
-                $html = '<table class="table">';
+                $html = '<table class="table" id="availability-form">';
                 foreach ($candidates as $ci => $candidate) {
                   array_push($cand_array, $candidate);
                   //初期では丸にする。
@@ -124,6 +124,7 @@
               print "<input id=\"availabilities\" type=\"hidden\" name=\"availability\" value=\"{$avail_value}\">";
               print "<input type=\"hidden\" name=\"scheduleId\" value=\"{$scheduleId}\">";
               print "<input type=\"hidden\" name=\"candidates\" value=\"{$cand_value}\">";
+              print "<input id=\"userId\" type=\"hidden\" name=\"userId\">";
             ?>
           </div>
           <div>
