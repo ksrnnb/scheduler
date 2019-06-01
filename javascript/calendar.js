@@ -14,37 +14,44 @@ const today = new Date();
 let year = today.getFullYear();
 let month = today.getMonth();
 
-let html = '<i id="prev" class="mt-5 fas fa-chevron-circle-left"></i>';
-html += '<i id="next" class="fas fa-chevron-circle-right"></i>';
-
-container.insertAdjacentHTML('afterbegin', html);
-
-const prev = document.getElementById('prev');
-const next = document.getElementById('next');
-
-prev.addEventListener('click', () => {
-  document.removeEventListener('click', add_candidates);
-  if (month > 0) {
-    month--;
-  } else {
-    month = 11;
-    year--;
-  }
-  show_calendar(year, month);
-});
-
-next.addEventListener('click', () => {
-  document.removeEventListener('click', add_candidates);
-  if (month < 11) {
-    month++;
-  } else {
-    year++;
-    month = 0;
-  }
-  show_calendar(year, month);
-});
-
+initialize();
 show_calendar(year, month);
+
+
+function initialize() {
+
+  let html = '<div id="date-container"><i id="prev" class="mt-5 fas fa-chevron-circle-left"></i>';
+  html += '<h3 id="cal-date"></h3>'
+  html += '<i id="next" class="fas fa-chevron-circle-right"></i></div>';
+  
+  // containerの子要素の直前にいれる。
+  container.insertAdjacentHTML('afterbegin', html);
+  
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  
+  prev.addEventListener('click', () => {
+    document.removeEventListener('click', add_candidates);
+    if (month > 0) {
+      month--;
+    } else {
+      month = 11;
+      year--;
+    }
+    show_calendar(year, month);
+  });
+  
+  next.addEventListener('click', () => {
+    document.removeEventListener('click', add_candidates);
+    if (month < 11) {
+      month++;
+    } else {
+      year++;
+      month = 0;
+    }
+    show_calendar(year, month);
+  });
+}
 
 function add_candidates(e) {
   if (e.target.classList.contains('able-day')) {
@@ -84,10 +91,11 @@ function show_calendar(year, month) {
   const lastMonthDayEnd = (new Date(year, month, 0)).getDate();
 
   let day = 1;
-
   let html = '<h2>' + year + '/' + (month + 1) + '</h2>';
+  // 日付をいれる。
+  document.getElementById('cal-date').innerHTML = html;
 
-  html += '<table class="table"><thead><tr>';
+  html = '<table class="table"><thead><tr>';
 
   for (let i = 0; i < weeks.length; i++) {
     if (i === 0) {

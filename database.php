@@ -9,9 +9,8 @@
     print $e;
   }
 
-  createDatabase($db);
-
-  function createDatabase($db) {
+  function createTables() {
+    global $db;
     $db->exec("CREATE TABLE IF NOT EXISTS User (
       userId INT NOT NULL AUTO_INCREMENT,
       userName VARCHAR(16),
@@ -47,6 +46,14 @@
       $q->execute(array($candidate, $scheduleId));
     }
     
+  }
+
+  function dropAllTables() {
+    global $db;
+    $db->exec("DROP TABLE User");
+    $db->exec("DROP TABLE Candidate");
+    $db->exec("DROP TABLE Availability");
+    $db->exec("DROP TABLE Schedule");
   }
 
   function get_schedule($scheduleId) {
@@ -124,7 +131,7 @@
 
     if ($userId) {
       $userId = trim($userId, 'id');
-      $qu = $db->prepare("UPDATE User SET  userName = ? where userId = ?");
+      $qu = $db->prepare("UPDATE User SET userName = ? where userId = ?");
       $qu->execute(array($user, $userId));
 
       $candidates = explode('-', $candidates);
@@ -143,10 +150,8 @@
       $q = $db->prepare("INSERT INTO User (userName, scheduleId) VALUES (?, ?)");
       $q->execute(array($user, $scheduleId));
   
-      // 登録したユーザーのIDを取得（AUTO INCREMENTのやつ、登録時にとってこれたらいいのに。。。）
-      $qu = $db->prepare("SELECT userId from User where userName = ? AND scheduleId = ?");
-      $qu->execute(array($user, $scheduleId));
-      $userId = $qu->fetch()->userId;
+      // 登録したユーザーのIDを取得
+      $userId = $db->lastInsertId();
   
       $candidates = explode('-', $candidates);
       foreach ($candidates as $i => $candidate) {

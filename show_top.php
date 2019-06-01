@@ -18,17 +18,17 @@
     </div>
     <?php print "<form method=\"POST\" action=\"{$_SERVER['PHP_SELF']}\">"?>
       <div>
-        <p>予定名</p>
-        <input name="schedule-name" required>
+        <p class="mb-0">予定名</p>
+        <input class="col-6 form-control" name="schedule-name" required>
       </div>
       <div>
-        <p>候補日程</p>
+        <p class="mb-0 mt-3">候補日程</p>
         <!-- <textarea id="candidates" name="candidates" rows=10 required readonly></textarea> -->
-        <textarea id="candidates" rows=10 required readonly></textarea>
+        <textarea id="candidates" class="col-6 form-control" rows=10 required readonly></textarea>
         <input id="candidates_input" type="hidden" name="candidates">
       </div>
       <div>
-        <input type="submit" value="予定をつくる">
+        <input class="mt-4 btn btn-primary" type="submit" value="予定をつくる">
       </div>
     </form>
     <!-- js -->

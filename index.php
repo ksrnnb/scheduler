@@ -12,6 +12,10 @@
       process_form($input);
     }
   } else {
+
+    // TableぜんぶDropしたいとき。　あとで削除する
+    // dropAllTables();
+
     if (isset($_GET['id'])) {
       //ここ脆弱性確認する！！　OSコマンドインジェクション？？
       show_table($_GET['id']);
@@ -47,6 +51,7 @@
     //ほぼ重複しないと思うけど0%ではない？
     $scheduleId = md5(uniqid(mt_rand(), true));
 
+    createTables();
     registration($scheduleId, $input['schedule-name'], $input['candidates']);
     
     $schedule_url = '/?id=' . $scheduleId;

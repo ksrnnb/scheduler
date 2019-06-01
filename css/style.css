@@ -4,7 +4,26 @@ td {
 
 i {
   font-size: 24px;
+  padding: 0 20px;
+  cursor: pointer;
 }
+
+thead {
+  text-align: center;
+}
+
+#date-container {
+  text-align: center;
+}
+
+#cal-date {
+  display: inline-block;
+}
+
+#candidates {
+  background-color: #fff;
+}
+
 
 .Saturday {
   color: blue;
@@ -19,10 +38,10 @@ i {
   background-color: #fafafa;
 }
 
-.user {
+/* .user {
   color: skyblue;
   cursor: pointer;
-}
+} */
 
 .symbol {
   user-select: none;

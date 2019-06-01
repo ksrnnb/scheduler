@@ -58,7 +58,7 @@ document.addEventListener('click', (e) => {
   } else if (e.target.classList.contains('user')) {
     // 送信ボタンの名前かえる。
     submit_button.value = '更新';
-    input.classList.remove('hidden');
+    input.classList.remove('d-none');
 
     let user = e.target;
     let userName = e.target.innerHTML;
