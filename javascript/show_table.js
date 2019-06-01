@@ -16,11 +16,11 @@ input.addEventListener('click', () => {
   if (form.classList.contains('hidden')) {
 
     form.classList.remove('hidden');
-
-    input.classList.add('hidden');
+    // hiddenが効かない->d-none
+    input.classList.add('d-none');
   } else {
     //テスト中は繰り返せるようにしておく
-    input.classList.add('hidden');
+    input.classList.add('d-none');
     submit_button.setAttribute('value', '登録');
     userId.removeAttribute('value');
     user_form.removeAttribute('value');

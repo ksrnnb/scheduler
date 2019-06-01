@@ -87,7 +87,7 @@
         ?>
       </div>
       <div>
-        <button id="input">入力ボタン</button>
+        <button id="input" class="btn btn-primary">入力ボタン</button>
       </div>
       <div id="form" class="hidden">
         <?php print "<form method=\"POST\" action=\"/registration.php\">"?>
@@ -131,7 +131,7 @@
             ?>
           </div>
           <div>
-            <input type="submit" id="submit_button" value="とうろく">
+            <input type="submit" class="btn btn-primary" id="submit_button" value="登録">
           </div>
         </form>
       </div>

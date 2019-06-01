@@ -6,6 +6,19 @@ i {
   font-size: 24px;
 }
 
+.Saturday {
+  color: blue;
+}
+
+.Sunday {
+  color: red;
+}
+
+.noselect {
+  user-select: none;
+  background-color: #fafafa;
+}
+
 .user {
   color: skyblue;
   cursor: pointer;
@@ -23,6 +36,8 @@ i {
 
 .able-day:hover {
   cursor: pointer;
+  opacity: 0.5;
+  
 }
 
 .selected {

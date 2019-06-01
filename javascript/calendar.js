@@ -14,7 +14,7 @@ const today = new Date();
 let year = today.getFullYear();
 let month = today.getMonth();
 
-let html = '<i id="prev" class="fas fa-chevron-circle-left"></i>';
+let html = '<i id="prev" class="mt-5 fas fa-chevron-circle-left"></i>';
 html += '<i id="next" class="fas fa-chevron-circle-right"></i>';
 
 container.insertAdjacentHTML('afterbegin', html);
@@ -55,7 +55,7 @@ function add_candidates(e) {
       e.target.classList.remove('selected');
       candidateArray = candidateArray.filter(d => d !== data_date);
     } else {
-      //洗濯済みの日付の背景色かえる。
+      //選択済みの日付の背景色かえる。
       e.target.classList.add('selected');
       //候補日の配列に追加
       candidateArray.push(data_date);
@@ -87,13 +87,19 @@ function show_calendar(year, month) {
 
   let html = '<h2>' + year + '/' + (month + 1) + '</h2>';
 
-  html += '<table class="table"><tr>';
+  html += '<table class="table"><thead><tr>';
 
   for (let i = 0; i < weeks.length; i++) {
-    html += '<td>' + weeks[i] + '</td>';
+    if (i === 0) {
+      html += '<th class="Sunday noselect">' + weeks[i] + '</th>';
+    } else if (i === 6) {
+      html += '<th class="Saturday noselect">' + weeks[i] + '</th>';
+    } else {
+      html += '<th class="noselect">' + weeks[i] + '</th>';
+    }
   }
 
-  html += '</tr>';
+  html += '</tr></thead>';
 
   for (let w = 0; w < 6; w++) {
 
@@ -101,8 +107,10 @@ function show_calendar(year, month) {
     
     for (let d = 0; d < 7; d++) {
       
+      let week_class= '';
+
       if (w === 0 && d < dayBegin) {
-        html += `<td class="disable">${lastMonthDayEnd - dayBegin + d + 1}</td>`;
+        html += `<td class="disable noselect">${lastMonthDayEnd - dayBegin + d + 1}</td>`;
       } else if (day <= dayEnd) {
         //0埋め
         const y0 = ('000' + year).slice(-4);
@@ -110,14 +118,20 @@ function show_calendar(year, month) {
         const d0 = ('0' + day).slice(-2);
         
         //すでに選択済みの場合はselectedクラスを追加。
+        if (d === 0) {
+          week_class = 'Sunday';
+        } else if (d === 6) {
+          week_class = 'Saturday';
+        }
+        
         if (candidateArray.includes(y0 + '-' + m0 + '-' + d0)) {
-          html += `<td class="able-day selected" data-date=${y0}/${m0}/${d0}>${day}</td>`;
+          html += `<td class="able-day noselect selected ${week_class}" data-date=${y0}/${m0}/${d0}>${day}</td>`;
         } else {
-          html += `<td class="able-day" data-date=${y0}/${m0}/${d0}>${day}</td>`;
+          html += `<td class="able-day noselect ${week_class}" data-date=${y0}/${m0}/${d0}>${day}</td>`;
         }
         day++;
       } else {
-        html += `<td class="disable">${day - dayEnd}</td>`;
+        html += `<td class="disable noselect ${week_class}">${day - dayEnd}</td>`;
         day++;
       }
     }
