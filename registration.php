@@ -28,12 +28,13 @@
     $input['candidates'] = htmlentities($_POST['candidates']);
     $input['user'] = htmlentities($_POST['user']);
     $input['availability'] = htmlentities($_POST['availability']);
+    $input['userId'] = htmlentities($_POST['userId']);
 
     return array($errors, $input);
   }
 
   function process_form($input) {
-    user_registration($input['scheduleId'], $input['candidates'], $input['user'], $input['availability']);
+    user_registration($input['scheduleId'], $input['candidates'], $input['user'], $input['availability'], $input['userId']);
     
     $schedule_url =  '/?id=' . $input['scheduleId'];
     //リダイレクトする。

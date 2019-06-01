@@ -6,7 +6,8 @@
     $symbols = array('○', '△', '×');
     list($circle, $triangle, $cross) = array(0, 1, 2);
     //スケジュール名、候補日、ユーザー、候補日（二重の連想配列）をとってきて返す。
-    //schedule_name: string, candidates: array, users: array, availabilities: associative array(associative array)
+    //schedule_name: string, candidates: array, users: array(userId => userName)
+    // availabilities: associative array (user => array(candidate => availability))
     list($schedule_name, $candidates, $users, $availabilities) = get_schedule($scheduleId);
     
     ?>
@@ -52,10 +53,11 @@
         $html .= '</th>';
         //issetだと空の配列もtrueになるっぽい
         if (! empty($users)) {
-          $html .= '<th scope="col"><a href="#form" class="user">';
-          $html .= implode('</a></th><th scope="col"><a href="#form" class="user">', $users);
-          $html .= '</a></th></tr></thead>';
+          foreach ($users as $userId => $userName) {
+            $html .= "<th scope=\"col\"><a href=\"#form\" class=\"user\" data-id={$userId}>{$userName}</a></th>";
+          }
         }
+        $html .= '</thead>';
         
 
         if (isset($candidates)) {
@@ -69,8 +71,9 @@
     
             $html .= implode('</td><td>', $symbol_sum);
             $html .= '</td>';
-            foreach ($users as $user) {
-              $html = $html . '<td>' . $symbols[$availabilities[$user][$candidate]] . '</td>';
+            foreach ($users as $userId => $userName) {
+              // var_dump($availabilities[$userId]);
+              $html = $html . '<td>' . $symbols[$availabilities[$userId][$candidate]] . '</td>';
             }
             $html .= '</tr>';
 
@@ -128,7 +131,7 @@
             ?>
           </div>
           <div>
-            <input type="submit" value="とうろく">
+            <input type="submit" id="submit_button" value="とうろく">
           </div>
         </form>
       </div>

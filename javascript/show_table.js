@@ -4,6 +4,8 @@ const input = document.getElementById('input');
 const form = document.getElementById('form');
 const availabilities = document.getElementById('availabilities');
 const user_form = document.getElementById('user-form');
+const userId = document.getElementById('userId');
+const submit_button = document.getElementById('submit_button');
 let candidates = document.getElementsByClassName('candidate');
 let symbols = document.getElementsByClassName('symbol');
 let users = document.getElementsByClassName('user');
@@ -14,11 +16,14 @@ input.addEventListener('click', () => {
   if (form.classList.contains('hidden')) {
 
     form.classList.remove('hidden');
-    
-    // input.classList.add('hidden');
+
+    input.classList.add('hidden');
   } else {
     //テスト中は繰り返せるようにしておく
-    form.classList.add('hidden');
+    input.classList.add('hidden');
+    submit_button.setAttribute('value', '登録');
+    userId.removeAttribute('value');
+    user_form.removeAttribute('value');
   }
 });
 
@@ -51,6 +56,10 @@ document.addEventListener('click', (e) => {
       e.target.classList.add('selected');
     }
   } else if (e.target.classList.contains('user')) {
+    // 送信ボタンの名前かえる。
+    submit_button.value = '更新';
+    input.classList.remove('hidden');
+
     let user = e.target;
     let userName = e.target.innerHTML;
     //HTML collectionをarrayに変換、この1行ちょっと難しい。
@@ -67,6 +76,8 @@ document.addEventListener('click', (e) => {
       let symbol = candidate.children[index + 4].innerHTML;
       availability_array.push(symbol_array.indexOf(symbol));
     });
+
+    userId.setAttribute('value', user.dataset.id);
 
     user_form.setAttribute('value', userName);
     form.classList.remove('hidden');
@@ -87,7 +98,6 @@ document.addEventListener('click', (e) => {
       // availabilityのinputも更新
       let value_attr = availability_array.join('-');
       availabilities.setAttribute('value', value_attr);
-
       
     });
     
