@@ -13,6 +13,7 @@ thead {
 }
 
 #date-container {
+  margin-top: 78px;
   text-align: center;
 }
 
@@ -60,7 +61,7 @@ thead {
 }
 
 .selected {
-  background-color: lightblue;
+  background-color: #B3D9FF;
 }
 
 .hidden {

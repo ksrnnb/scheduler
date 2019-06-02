@@ -21,7 +21,7 @@ show_calendar(year, month);
 function initialize() {
 
   let html = '<div id="date-container"><i id="prev" class="mt-5 fas fa-chevron-circle-left"></i>';
-  html += '<h3 id="cal-date"></h3>'
+  html += '<h4 id="cal-date"></h4>'
   html += '<i id="next" class="fas fa-chevron-circle-right"></i></div>';
   
   // containerの子要素の直前にいれる。

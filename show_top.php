@@ -13,27 +13,31 @@
 </head>
 <body>
   <div class="container">
-    <div>
-      <h2><a href="/">Scheduler</a></h2>
-    </div>
-    <?php print "<form method=\"POST\" action=\"{$_SERVER['PHP_SELF']}\">"?>
-      <div>
-        <p class="mb-0">予定名</p>
-        <input class="col-6 form-control" name="schedule-name" required>
+      <div class="row">
+      <div id="left-side" class="col-6">
+        <div>
+          <h2 class="mt-5 mb-5"><a href="/">Scheduler</a></h2>
+        </div>
+        <?php print "<form method=\"POST\" action=\"{$_SERVER['PHP_SELF']}\">"?>
+          <div>
+            <h4>予定名</h4>
+            <input class="form-control" name="schedule-name" required>
+          </div>
+          <div>
+            <h4 class="mt-3">候補日程</h4>
+            <!-- <textarea id="candidates" name="candidates" rows=10 required readonly></textarea> -->
+            <textarea id="candidates" class="form-control" rows=10 required readonly></textarea>
+            <input id="candidates_input" type="hidden" name="candidates">
+          </div>
+          <div>
+            <input class="mt-4 btn btn-primary" type="submit" value="予定をつくる">
+          </div>
+        </form>
       </div>
-      <div>
-        <p class="mb-0 mt-3">候補日程</p>
-        <!-- <textarea id="candidates" name="candidates" rows=10 required readonly></textarea> -->
-        <textarea id="candidates" class="col-6 form-control" rows=10 required readonly></textarea>
-        <input id="candidates_input" type="hidden" name="candidates">
-      </div>
-      <div>
-        <input class="mt-4 btn btn-primary" type="submit" value="予定をつくる">
-      </div>
-    </form>
-    <!-- js -->
-    <div id="c-container">
-      <div id="calendar">
+      <!-- js -->
+      <div id="c-container" class="col-6">
+        <div id="calendar">
+        </div>
       </div>
     </div>
   </div>

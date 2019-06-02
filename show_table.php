@@ -29,8 +29,9 @@
       </div>
       <div>
         <h2><?= $schedule_name ?></h2>
+        <hr color="#ccc">
       </div>
-      <h3 class="mt-5">URL</h3>
+      <h4 class="mt-5">URL</h4>
       <div class="input-group flex-nowrap">
         <input type="text" class="form-control" id="url" aria-label="Username" aria-describedby="addon-wrapping" readonly
         <?php
@@ -47,10 +48,10 @@
         >
       </div>
       <div>
-        <h3 class="mt-5">候補</h3>
+        <h4 class="mt-5">候補</h4>
         <?php 
 
-        $html = '<table id="schedule" class="table table-bordered"><thead><tr><th scope="col">日程</th><th>';
+        $html = '<table id="schedule" class="table table-bordered"><thead><tr><th scope="col">日程</th><th scope="col">';
         $html .= implode('</th><th scope="col">', $symbols);
         $html .= '</th>';
         //issetだと空の配列もtrueになるっぽい
@@ -88,21 +89,23 @@
         ?>
       </div>
       <div>
-        <button id="input" class="btn btn-primary mt-5 mb-5">入力ボタン</button>
+        <button id="input" class="btn btn-primary mt-5 mb-5">新規登録</button>
       </div>
       <div id="form" class="hidden">
+        <h4 class="mt-5">出欠の入力</h4>
+        <hr color="#ccc">
         <?php print "<form method=\"POST\" action=\"/registration.php\">"?>
           <div>
-            <p class="mt-5 mb-0">ユーザ名</p>
+            <h5 class="mt-5 mb-0">ユーザ名</h5>
             <input name="user" id="user-form" class="col-6" required>
           </div>
           <div>
-            <p class="mt-5 mb-0">候補</p>
+            <h5 class="mt-5 mb-0">候補</h5>
             <?php
               if (isset($candidates)) {
                 $cand_array = [];
                 $avail_array = [];
-                $html = '<table class="table col-6" id="availability-form">';
+                $html = '<table class="table table-bordered col-6" id="availability-form">';
                 foreach ($candidates as $ci => $candidate) {
                   array_push($cand_array, $candidate);
                   //初期では丸にする。
@@ -132,7 +135,7 @@
             ?>
           </div>
           <div>
-            <input type="submit" class="btn btn-primary" id="submit_button" value="登録">
+            <input type="submit" class="btn btn-primary mt-5 mb-5" id="submit_button" value="登録">
           </div>
         </form>
       </div>
