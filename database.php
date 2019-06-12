@@ -1,10 +1,12 @@
 <?php
   require 'variable.php';
   try {
-    $db = new PDO('mysql:host=192.168.33.10;dbname=scheduler', $db_user, $db_password);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // フェッチスタイルをオブジェクトに
-    $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+    $opt = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                 PDO::MYSQL_ATTR_MULTI_STATEMENTS => false,
+                 PDO::ATTR_EMULATE_PREPARES => false,
+                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ);
+    $db = new PDO('mysql:host=192.168.33.10;dbname=scheduler', $db_user, $db_password, $opt);
+
   } catch (PDOException $e) {
     print $e;
   }
@@ -13,7 +15,7 @@
     global $db;
     $db->exec("CREATE TABLE IF NOT EXISTS User (
       userId INT NOT NULL AUTO_INCREMENT,
-      userName VARCHAR(16),
+      userName VARCHAR(32),
       scheduleId CHAR(32),
       PRIMARY KEY(userId)
     )");
@@ -38,12 +40,16 @@
   function registration($scheduleId, $schedule_name, $candidates) {
     global $db;
     $q = $db->prepare("INSERT INTO Schedule (scheduleId, scheduleName) VALUES (?, ?)");
-    $q->execute(array($scheduleId, $schedule_name));
+    $q->bindValue(1, $scheduleId, PDO::PARAM_STR);
+    $q->bindValue(2, $schedule_name, PDO::PARAM_STR);
+    $q->execute();
     
     foreach ($candidates as $candidate) {
       
       $q = $db->prepare("INSERT INTO Candidate (candidate, scheduleId) VALUES (?, ?)");
-      $q->execute(array($candidate, $scheduleId));
+      $q->bindValue(1, $candidate, PDO::PARAM_STR);
+      $q->bindValue(2, $scheduleId, PDO::PARAM_STR);
+      $q->execute();
     }
     
   }
@@ -63,11 +69,13 @@
 
     //Schedule, Candidate, User, Availabilityを結合する？
     $qs = $db->prepare("SELECT scheduleName from Schedule where scheduleId = ?");
-    $qs->execute(array($scheduleId));
+    $qs->bindValue(1, $scheduleId, PDO::PARAM_STR);
+    $qs->execute();
     $schedule_name = $qs->fetch()->scheduleName;
 
     $qc = $db->prepare("SELECT candidate from Candidate where scheduleId = ?");
-    $qc->execute(array($scheduleId));
+    $qc->bindValue(1, $scheduleId, PDO::PARAM_STR);
+    $qc->execute();
     $candidates = [];
     while ($row = $qc->fetch()) {
       array_push($candidates, $row->candidate);
@@ -75,7 +83,8 @@
 
     //ユーザーとAvailabilitiesをとってきて同じ形式で返す。
     $qu = $db->prepare("SELECT userName, userId from User where scheduleId = ?");
-    $qu->execute(array($scheduleId));
+    $qu->bindValue(1, $scheduleId, PDO::PARAM_STR);
+    $qu->execute();
     $users = [];
     while ($row = $qu->fetch()) {
       //数値をそのままキーにできない。。。
@@ -85,9 +94,12 @@
     //availabilitiesを同じ形で返すように。。。
     $availabilities = [];
     foreach ($users as $userId => $userName) {
+      $userId_int = intval(trim($userId, 'id'));
       $qa = $db->prepare("SELECT availability, candidate from Availability INNER JOIN Candidate 
                           ON Availability.candidateId = Candidate.candidateId where Candidate.scheduleId = ? and userId = ?");
-      $qa->execute(array($scheduleId, trim($userId, 'id')));
+      $qa->bindValue(1, $scheduleId, PDO::PARAM_STR);
+      $qa->bindValue(2, trim($userId, 'id'), PDO::PARAM_INT);
+      $qa->execute();
       // ここは毎回初期化しとく
       $availability_array = [];
       while ($row = $qa->fetch()) {
@@ -109,7 +121,9 @@
     $q = $db->prepare("SELECT availability from Availability
                       INNER JOIN Candidate ON Availability.candidateId = Candidate.candidateId
                       where Candidate.scheduleId = ? and Candidate.candidate = ?");
-    $q->execute(array($scheduleId, $candidate));
+    $q->bindValue(1, $scheduleId, PDO::PARAM_STR);
+    $q->bindValue(2, $candidate, PDO::PARAM_INT);
+    $q->execute();
 
     // 初期化
     $symbol_sum = array(0, 0, 0);
@@ -130,25 +144,34 @@
     }
 
     if ($userId) {
-      $userId = trim($userId, 'id');
+      $userId = intval(trim($userId, 'id'));
       $qu = $db->prepare("UPDATE User SET userName = ? where userId = ?");
-      $qu->execute(array($user, $userId));
+      $qu->bindValue(1, $user, PDO::PARAM_STR);
+      $qu->bindValue(2, $userId, PDO::PARAM_INT);
+      $qu->execute();
 
       $candidates = explode('-', $candidates);
       foreach ($candidates as $i => $candidate) {
   
         $qc = $db->prepare("SELECT candidateId from Candidate WHERE candidate = ? AND scheduleId = ?");
-        $qc->execute(array($candidate, $scheduleId));
+        $qc->bindValue(1, $candidate, PDO::PARAM_STR);
+        $qc->bindValue(2, $scheduleId, PDO::PARAM_STR);
+        $qc->execute();
         $candidateId = $qc->fetch()->candidateId;
   
         //  availabilityの更新
         $qa = $db->prepare("UPDATE Availability SET availability = ? WHERE userId = ? AND candidateId = ?");
-        $qa->execute(array($availabilities[$i], $userId, $candidateId));
+        $qa->bindValue(1, $availabilities[$i], PDO::PARAM_INT);
+        $qa->bindValue(2, $userId, PDO::PARAM_INT);
+        $qa->bindValue(3, $candidateId, PDO::PARAM_INT);
+        $qa->execute();
       }
     } else {
       //ユーザーの登録
       $q = $db->prepare("INSERT INTO User (userName, scheduleId) VALUES (?, ?)");
-      $q->execute(array($user, $scheduleId));
+      $q->bindValue(1, $user, PDO::PARAM_STR);
+      $q->bindValue(2, $scheduleId, PDO::PARAM_STR);
+      $q->execute();
   
       // 登録したユーザーのIDを取得
       $userId = $db->lastInsertId();
@@ -157,12 +180,18 @@
       foreach ($candidates as $i => $candidate) {
   
         $qc = $db->prepare("SELECT candidateId from Candidate where candidate = ? AND scheduleId = ?");
-        $qc->execute(array($candidate, $scheduleId));
+        $qc->bindValue(1, $candidate, PDO::PARAM_STR);
+        $qc->bindValue(2, $scheduleId, PDO::PARAM_STR);
+        $qc->execute();
         $candidateId = $qc->fetch()->candidateId;
   
         //  availabilityの登録
         $qa = $db->prepare("INSERT INTO Availability (availability, scheduleId, userId, candidateId) VALUES (?, ?, ?, ?)");
-        $qa->execute(array($availabilities[$i], $scheduleId, $userId, $candidateId));
+        $qa->bindValue(1, $availabilities[$i], PDO::PARAM_INT);
+        $qa->bindValue(2, $scheduleId, PDO::PARAM_STR);
+        $qa->bindValue(3, $userId, PDO::PARAM_INT);
+        $qa->bindValue(4, $candidateId, PDO::PARAM_INT);
+        $qa->execute();
       }
 
     }
