@@ -1,7 +1,7 @@
 <?php
 // index.phpですでにrequireしているから、もうrequireする必要ない？
   // require 'database.php';
-  function show_table($scheduleId) {  
+  function show_table($scheduleId) {
     $weeks = ['日', '月', '火', '水', '木', '金', '土'];
     $symbols = array('○', '△', '×');
     list($circle, $triangle, $cross) = array(0, 1, 2);

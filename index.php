@@ -17,8 +17,14 @@
     // dropAllTables();
 
     if (isset($_GET['id'])) {
-      //ここ脆弱性確認する！！　OSコマンドインジェクション？？
-      show_table($_GET['id']);
+      //静的プレースホルダを利用しているので、SQLインジェクション対策は問題ない、と思う。
+      $scheduleId = $_GET['id'];
+      if (check_scheduleId($scheduleId)) {
+        show_table($scheduleId);
+      } else {
+        //無効なidだよってページ作る。
+        print 'hoge';
+      }
     } else {
       show_form();
     }

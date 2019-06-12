@@ -37,6 +37,18 @@
     )");
   }
 
+  function check_scheduleId($scheduleId) {
+    global $db;
+    $q = $db->prepare("SELECT * FROM Schedule WHERE scheduleId = ?");
+    $q->bindValue(1, $scheduleId, PDO::PARAM_STR);
+    $q->execute();
+    if ($q->rowCount() > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function registration($scheduleId, $schedule_name, $candidates) {
     global $db;
     $q = $db->prepare("INSERT INTO Schedule (scheduleId, scheduleName) VALUES (?, ?)");
