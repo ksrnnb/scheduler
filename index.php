@@ -1,7 +1,6 @@
 <?php
 
-  require 'show_top.php';
-  require 'show_table.php';
+  require 'html_function.php';
   require 'database.php';
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
