@@ -22,8 +22,8 @@
       if (check_scheduleId($scheduleId)) {
         show_table($scheduleId);
       } else {
-        //無効なidだよってページ作る。
-        print 'hoge';
+        //無効なidにアクセスした場合
+        invalid_page();
       }
     } else {
       show_form();
