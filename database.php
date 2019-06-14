@@ -14,7 +14,7 @@
                  PDO::MYSQL_ATTR_MULTI_STATEMENTS => false,
                  PDO::ATTR_EMULATE_PREPARES => false,
                  PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ);
-    $db = new PDO('mysql:host=192.168.33.10;dbname=scheduler', $db_user, $db_password, $opt);
+    $db = new PDO('mysql:host=us-cdbr-iron-east-02.cleardb.net;dbname=heroku_2d2c98ec1234003', 'bddeb76d7e5f1c', '31ba560a', $opt);
 
   } catch (PDOException $e) {
     print $e;
