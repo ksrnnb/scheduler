@@ -1,4 +1,11 @@
 <?php
+
+$uri = $_SERVER['REQUEST_URI'];
+if (! strpos($uri, 'html_function.php') === false) {
+  invalid_page();
+}
+
+//--------------------Top page--------------------//
   function show_top_page() {
     ?>
 <!DOCTYPE html>
@@ -46,6 +53,7 @@
 </html>
 <?php }
 
+//--------------------invalid page--------------------//
   function invalid_page() {   ?>
     
     <!DOCTYPE html>
@@ -67,14 +75,12 @@
       <h5 class="mt-3 mx-auto">Please confirm URL.</h5>
     </div>
   </div>
-  <script src="./javascript/calendar.js"></script>
 </body>
 </html>
 <?php } ?>
 
 <?php
-// index.phpですでにrequireしているから、もうrequireする必要ない？
-  // require 'database.php';
+//--------------------show candidate table--------------------//
   function show_table($scheduleId) {
     $weeks = ['日', '月', '火', '水', '木', '金', '土'];
     $symbols = array('○', '△', '×');
@@ -89,7 +95,7 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     
@@ -214,7 +220,7 @@
         </form>
       </div>
     </div>
-    <script src="../javascript/show_table.js"></script>
+    <script src="./javascript/show_table.js"></script>
   </body>
 </html>
 <?php } ?>

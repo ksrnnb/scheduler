@@ -14,7 +14,6 @@
 
     // TableぜんぶDropしたいとき。　あとで削除する
     // dropAllTables();
-
     if (isset($_GET['id'])) {
       //静的プレースホルダを利用しているので、SQLインジェクション対策は問題ない、と思う。
       $scheduleId = $_GET['id'];
@@ -25,7 +24,13 @@
         invalid_page();
       }
     } else {
-      show_form();
+      //ホーム以外は無効なアクセス
+      if ($_SERVER['REQUEST_URI'] == '/') {
+        show_form();
+      } else {
+        invalid_page();
+      }
+      
     }
   }
 

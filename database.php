@@ -1,5 +1,14 @@
 <?php
   require 'variable.php';
+  
+
+  $uri = $_SERVER['REQUEST_URI'];
+  if (! strpos($uri, 'database.php') === false) {
+    // index.phpからきてないときは読み込む必要がある
+    require 'html_function.php';
+    invalid_page();
+  }
+
   try {
     $opt = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                  PDO::MYSQL_ATTR_MULTI_STATEMENTS => false,

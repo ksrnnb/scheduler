@@ -1,5 +1,7 @@
 <?php
   require 'database.php';
+  require 'html_function.php';
+
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     list($errors, $input) = validate_form();
     if ($errors) {
@@ -8,7 +10,8 @@
       process_form($input);
     }
   } else {
-      //不正なリクエスト
+    //不正なリクエスト
+    invalid_page();
   }
 
   function show_form($errors = array()) {
