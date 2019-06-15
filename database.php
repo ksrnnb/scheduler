@@ -1,7 +1,6 @@
 <?php
   require 'variable.php';
   
-
   $uri = $_SERVER['REQUEST_URI'];
   if (! strpos($uri, 'database.php') === false) {
     // index.phpからきてないときは読み込む必要がある
@@ -9,12 +8,24 @@
     invalid_page();
   }
 
+  //環境変数を設定していたとき
+  if(! getenv('DB_USER', true) === false) {
+    
+    $db_host = getenv('DB_HOST', true);
+    $db_name = getenv('DB_NAME', true);
+    $db_user = getenv('DB_USER', true);
+    $db_password = getenv('DB_PWD', true);
+
+  };
+
+  $db_url = 'mysql:host=' . $db_host . ';dbname=' . $db_name;
+
   try {
     $opt = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                  PDO::MYSQL_ATTR_MULTI_STATEMENTS => false,
                  PDO::ATTR_EMULATE_PREPARES => false,
                  PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ);
-    $db = new PDO('mysql:host=us-cdbr-iron-east-02.cleardb.net;dbname=heroku_2d2c98ec1234003', 'bddeb76d7e5f1c', '31ba560a', $opt);
+    $db = new PDO($db_url, $db_user, $db_password, $opt);
 
   } catch (PDOException $e) {
     print $e;
