@@ -131,8 +131,7 @@ function show_calendar(year, month) {
         } else if (d === 6) {
           week_class = 'Saturday';
         }
-        
-        if (candidateArray.includes(y0 + '-' + m0 + '-' + d0)) {
+        if (candidateArray.includes(y0 + '/' + m0 + '/' + d0)) {
           html += `<td class="able-day noselect selected ${week_class}" data-date=${y0}/${m0}/${d0}>${day}</td>`;
         } else {
           html += `<td class="able-day noselect ${week_class}" data-date=${y0}/${m0}/${d0}>${day}</td>`;
