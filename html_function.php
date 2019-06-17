@@ -6,7 +6,7 @@ if (! strpos($uri, 'html_function.php') === false) {
 }
 
 //--------------------Top page--------------------//
-  function show_top_page() {
+  function show_top_page($errors = array()) {
     ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -21,11 +21,17 @@ if (! strpos($uri, 'html_function.php') === false) {
 </head>
 <body>
   <div class="container">
+    <div>
+      <h2 class="mt-5 mb-5"><a href="/">Scheduler</a></h2>
+    </div>
+    <?php if($errors) {
+          print '<h5 class="error">';
+          print implode('</h5><h5>', $errors);
+          print '</h5>';
+        }
+      ?>
       <div class="row">
-      <div id="left-side" class="col-12 col-md-6">
-        <div>
-          <h2 class="mt-5 mb-5"><a href="/">Scheduler</a></h2>
-        </div>
+        <div id="left-side" class="col-12 col-md-6">
         <?php print "<form method=\"POST\" action=\"{$_SERVER['PHP_SELF']}\">"?>
           <div>
             <h5>予定名</h5>
@@ -33,7 +39,6 @@ if (! strpos($uri, 'html_function.php') === false) {
           </div>
           <div>
             <h5 class="mt-4">候補日程</h5>
-            <!-- <textarea id="candidates" name="candidates" rows=10 required readonly></textarea> -->
             <textarea id="candidates" class="form-control" rows=10 required readonly></textarea>
             <input id="candidates_input" type="hidden" name="candidates">
           </div>

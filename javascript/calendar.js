@@ -20,7 +20,7 @@ show_calendar(year, month);
 
 function initialize() {
 
-  let html = '<div id="date-container"><i id="prev" class="mt-5 fas fa-chevron-circle-left"></i>';
+  let html = '<div id="date-container"><i id="prev" class="mt-5 mt-md-0 fas fa-chevron-circle-left"></i>';
   html += '<h4 id="cal-date"></h4>'
   html += '<i id="next" class="fas fa-chevron-circle-right"></i></div>';
   
@@ -54,31 +54,31 @@ function initialize() {
 }
 
 function add_candidates(e) {
-  if (e.target.classList.contains('able-day')) {
-    const data_date = e.target.dataset.date;
 
-    //すでに候補日に追加されてる場合は追加しない。
-    if (candidateArray.includes(data_date)) {
-      e.target.classList.remove('selected');
-      candidateArray = candidateArray.filter(d => d !== data_date);
-    } else {
-      //選択済みの日付の背景色かえる。
-      e.target.classList.add('selected');
-      //候補日の配列に追加
-      candidateArray.push(data_date);
-    }
-    
-    //ソートする
-    candidateArray.sort();
-    candidates_input.setAttribute('value', candidateArray.join('-'));
-    //候補日程の更新
-    candidates.innerHTML = '';
-    for (let i = 0; i < candidateArray.length; i++) {
-      const candidate_date = new Date(candidateArray[i]);
-      candidates.innerHTML += `${candidate_date.getMonth() + 1}/${candidate_date.getDate()}(${weeks[candidate_date.getDay()]})\n`;
-    }
+  const data_date = e.target.dataset.date;
+
+  //すでに候補日に追加されてる場合は追加しない。
+  if (candidateArray.includes(data_date)) {
+    e.target.classList.remove('selected');
+    candidateArray = candidateArray.filter(d => d !== data_date);
+  } else {
+    //選択済みの日付の背景色かえる。
+    e.target.classList.add('selected');
+    //候補日の配列に追加
+    candidateArray.push(data_date);
+  }
+  
+  //ソートする
+  candidateArray.sort();
+  candidates_input.setAttribute('value', candidateArray.join('-'));
+  //候補日程の更新
+  candidates.innerHTML = '';
+  for (let i = 0; i < candidateArray.length; i++) {
+    const candidate_date = new Date(candidateArray[i]);
+    candidates.innerHTML += `${candidate_date.getMonth() + 1}/${candidate_date.getDate()}(${weeks[candidate_date.getDay()]})\n`;
   }
 }
+
 
 function show_calendar(year, month) {
   const monthBegin = new Date(year, month, 1);
@@ -151,6 +151,16 @@ function show_calendar(year, month) {
 
   calendar.innerHTML = html;
 
-  document.addEventListener("click", add_candidates);
+  //各要素に対してaddEventListener
+  let able_days = document.getElementsByClassName('able-day');
+
+  able_days = [].slice.call(able_days);
+
+  able_days.forEach(able_day => {
+    able_day.addEventListener('click', add_candidates);
+    able_day.addEventListener('touchend', () => {
+      able_day.style.opacity = 1.0;
+    })
+  });
 
 }

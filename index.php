@@ -6,7 +6,7 @@
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     list($errors, $input) = validate_form();
     if ($errors) {
-      show_form($errors);
+      show_top_page($errors);
     } else {
       process_form($input);
     }
@@ -26,7 +26,7 @@
     } else {
       //ホーム以外は無効なアクセス
       if ($_SERVER['REQUEST_URI'] == '/') {
-        show_form();
+        show_top_page();
       } else {
         invalid_page();
       }
@@ -34,23 +34,20 @@
     }
   }
 
-  function show_form($errors = array()) {
-    if ($errors) {
-      print '<ul><li>';
-      print implode('</li><li>', $errors);
-      print '</li></ul>';
-    }
-    // show_top.phpより。
-    show_top_page();
-  }
-
   function validate_form() {
     $errors = array();
     $input = array();
 
+    if(! $_POST['candidates']) {
+      //もしsetされてない場合はエラーメッセージを出す。
+      $errors[] = 'カレンダーから候補日程を選択してください';
+    }
+
     //htmlentities: XSS対策
     $input['schedule-name'] = htmlentities($_POST['schedule-name']);
     $input['candidates'] = explode('-', htmlentities($_POST['candidates']));
+
+
     return array($errors, $input);
   }
 
